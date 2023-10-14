@@ -2,6 +2,25 @@
 <resources>
     <style name="LetterButton">
         <item name="android:layout_width">60dp</item>
-        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="LetterButtonTablet">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">85dp</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="newGameButton">
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="newGameButtonTablet">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:textSize">30sp</item>
     </style>
 </resources>
