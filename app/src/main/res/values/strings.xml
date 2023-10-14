@@ -2,6 +2,7 @@
     <string name="app_name">hangman</string>
     <string name="blank">_ _ _ _ _</string>
     <string name="prompt">CHOOSE A LETTER</string>
+    <string name="new_game">New Game</string>
     <string name="A">A</string>
     <string name="B">B</string>
     <string name="C">C</string>

@@ -7,12 +7,21 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <Button
+        android:id="@+id/newGameButton"
+        android:text="@string/new_game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/newGameButton"
+        />
 
     <ImageView
         android:id="@+id/hangmanDisplay"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="48dp"
         android:src=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
