@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -13,6 +14,7 @@ import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
     private lateinit var wordToGuess: TextView
     private lateinit var hangmanDisplay: ImageView
+    private lateinit var allLetters: GridLayout
     private val wordsList = arrayOf("apple", "fruit", "chair", "table", "plane")
     private var currentWord = ""
     private var currentHint = ""
@@ -25,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         wordToGuess = findViewById(R.id.wordToGuess)
         hangmanDisplay = findViewById(R.id.hangmanDisplay)
+        allLetters = findViewById(R.id.letterButtons)
 
         newGame()
     }
@@ -34,12 +37,17 @@ class MainActivity : AppCompatActivity() {
         currentWord = wordsList[Random.nextInt(wordsList.size)]
         displayWord = "_".repeat(currentWord.length)
         wordToGuess.text = displayWord
-        hangmanDisplay.setImageResource(R.drawable.hangman_02)
+        hangmanDisplay.setImageResource(R.drawable.hangman_2)
+        for (i in 0 until allLetters.childCount) {
+            (allLetters.getChildAt(i)).isEnabled = true
+        }
+
     }
 
     fun letterClicked(view: View) {
         val button = view as Button
         val letter = button.text.toString()
+        button.isEnabled = false
         Log.d("MainActivity", "Button clicked: $letter")
 
         if (currentWord.contains(letter, true)) {
@@ -69,7 +77,6 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
-        button.isEnabled = false
     }
 
     fun newGameButton(view: View) {
