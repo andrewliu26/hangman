@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:padding="16dp">
 
     <Button
@@ -10,19 +11,18 @@
         android:text="@string/new_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:layout_marginBottom="32dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_marginTop="32dp"
-        app:layout_marginEnd="32dp"
-        style="@style/newGameButtonTablet"
-        />
+        style="@style/newGameButtonTablet" />
 
     <ImageView
         android:id="@+id/hangmanDisplay"
         android:layout_width="550dp"
         android:layout_height="550dp"
         android:layout_marginTop="60dp"
-        android:src=""
+        android:src="@drawable/hangman_01"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
