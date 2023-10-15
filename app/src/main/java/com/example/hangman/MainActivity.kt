@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var wordToGuess: TextView
     private lateinit var hangmanDisplay: ImageView
     private lateinit var allLetters: GridLayout
+    private lateinit var newGameButton: Button
+
     private val wordsList = arrayOf("apple", "fruit", "chair", "table", "plane")
     private var currentWord = ""
     private var currentHint = ""
@@ -28,6 +30,9 @@ class MainActivity : AppCompatActivity() {
         wordToGuess = findViewById(R.id.wordToGuess)
         hangmanDisplay = findViewById(R.id.hangmanDisplay)
         allLetters = findViewById(R.id.letterButtons)
+        newGameButton = findViewById(R.id.newGameButton)
+
+        newGameButton.setOnClickListener{ newGameClicked(newGameButton) }
 
         newGame()
     }
@@ -79,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun newGameButton(view: View) {
+    private fun newGameClicked(view: View) {
         newGame()
     }
 }
