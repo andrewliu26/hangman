@@ -57,6 +57,7 @@
 
     <!-- Letter Buttons -->
     <GridLayout
+        android:id="@+id/letterButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -73,156 +74,182 @@
             style="@style/LetterButton"
             android:layout_row="0"
             android:layout_column="0"
+            android:onClick="letterClicked"
             android:text="@string/A" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="0"
             android:layout_column="1"
+            android:onClick="letterClicked"
             android:text="@string/B" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="0"
             android:layout_column="2"
+            android:onClick="letterClicked"
             android:text="@string/C" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="0"
             android:layout_column="3"
+            android:onClick="letterClicked"
             android:text="@string/D" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="0"
             android:layout_column="4"
+            android:onClick="letterClicked"
             android:text="@string/E" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="0"
             android:layout_column="5"
+            android:onClick="letterClicked"
             android:text="@string/F" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="1"
             android:layout_column="0"
+            android:onClick="letterClicked"
             android:text="@string/G" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="1"
             android:layout_column="1"
+            android:onClick="letterClicked"
             android:text="@string/H" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="1"
             android:layout_column="2"
+            android:onClick="letterClicked"
             android:text="@string/I" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="1"
             android:layout_column="3"
+            android:onClick="letterClicked"
             android:text="@string/J" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="1"
             android:layout_column="4"
+            android:onClick="letterClicked"
             android:text="@string/K" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="1"
             android:layout_column="5"
+            android:onClick="letterClicked"
             android:text="@string/L" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="2"
             android:layout_column="0"
+            android:onClick="letterClicked"
             android:text="@string/M" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="2"
             android:layout_column="1"
+            android:onClick="letterClicked"
             android:text="@string/N" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="2"
             android:layout_column="2"
+            android:onClick="letterClicked"
             android:text="@string/O" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="2"
             android:layout_column="3"
+            android:onClick="letterClicked"
             android:text="@string/P" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="2"
             android:layout_column="4"
+            android:onClick="letterClicked"
             android:text="@string/Q" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="2"
             android:layout_column="5"
+            android:onClick="letterClicked"
             android:text="@string/R" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="3"
             android:layout_column="0"
+            android:onClick="letterClicked"
             android:text="@string/S" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="3"
             android:layout_column="1"
+            android:onClick="letterClicked"
             android:text="@string/T" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="3"
             android:layout_column="2"
+            android:onClick="letterClicked"
             android:text="@string/U" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="3"
             android:layout_column="3"
+            android:onClick="letterClicked"
             android:text="@string/V" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="3"
             android:layout_column="4"
+            android:onClick="letterClicked"
             android:text="@string/W" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="3"
             android:layout_column="5"
+            android:onClick="letterClicked"
             android:text="@string/X" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="4"
             android:layout_column="2"
+            android:onClick="letterClicked"
             android:text="@string/Y" />
 
         <Button
             style="@style/LetterButton"
             android:layout_row="4"
             android:layout_column="3"
+            android:onClick="letterClicked"
             android:text="@string/Z" />
 
     </GridLayout>
