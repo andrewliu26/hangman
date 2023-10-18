@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.ViewModelProvider
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -19,34 +20,51 @@ class MainActivity : AppCompatActivity() {
     private lateinit var newGameButton: Button
     private var hintButton: Button? = null
 
+    private var lives = 6
+    private var hints = 0
+    private var currentWord = ""
+    private var displayWord = ""
+    private var image = 0
+
+    // Connect ViewModel
     private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Linking views
         wordToGuess = findViewById(R.id.wordToGuess)
         hangmanDisplay = findViewById(R.id.hangmanDisplay)
         allLetters = findViewById(R.id.letterButtons)
         newGameButton = findViewById(R.id.newGameButton)
         hintButton = findViewById(R.id.hintButton)
 
+        // Set button listeners
         newGameButton.setOnClickListener{ newGame() }
         hintButton?.setOnClickListener { showHint() }
 
-        hangmanDisplay.setImageResource(mainViewModel.hangmanImages[0])
-        hintButton?.isEnabled = false
-        disableLetters("all")
+        // Initial state
+        // mainViewModel.updateImage(hangmanDisplay, 0)
+        // hintButton?.isEnabled = false
+        // disableLetters("all")
+
+        updateState()
     }
 
     private fun newGame() {
-        mainViewModel.life = 6
-        mainViewModel.hintCount = 0
+        mainViewModel.updateLife(6)
+        mainViewModel.updateHints(0)
         hintButton?.isEnabled = true
-        mainViewModel.currentWord = mainViewModel.wordsList[Random.nextInt(mainViewModel.wordsList.size)]
-        mainViewModel.displayWord = "_".repeat(mainViewModel.currentWord.length)
-        wordToGuess.text = mainViewModel.displayWord
-        hangmanDisplay.setImageResource(mainViewModel.hangmanImages[1])
+        mainViewModel.generateWord()
+        mainViewModel.initDisplayWord()
+        wordToGuess.text = mainViewModel.fetchDisplayWord()
+        mainViewModel.updateImage(hangmanDisplay, 1)
+
+        lives = mainViewModel.fetchLives()
+        hints = mainViewModel.fetchHintCount()
+        currentWord = mainViewModel.fetchCurrentWord()
+        displayWord = mainViewModel.fetchDisplayWord()
 
         for (i in 0 until allLetters.childCount) {
             (allLetters.getChildAt(i)).isEnabled = true
@@ -54,27 +72,35 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun updateState() {
+        lives = mainViewModel.fetchLives()
+        hints = mainViewModel.fetchHintCount()
+        currentWord = mainViewModel.fetchCurrentWord()
+        displayWord = mainViewModel.fetchDisplayWord()
+
+    }
+
     private fun showHint() {
-        if (mainViewModel.life <= 1) {
+        if (mainViewModel.fetchLives() <= 1) {
             Toast.makeText(this, "Hint not available", Toast.LENGTH_SHORT).show()
             return
         }
 
-        when (mainViewModel.hintCount) {
+        when (mainViewModel.fetchHintCount()) {
             0 -> Toast.makeText(this, "Your first hint: Fruit!", Toast.LENGTH_SHORT).show()
             1 -> {
-                mainViewModel.life--
+                mainViewModel.deductLife()
                 disableLetters("half")
-                hangmanDisplay.setImageResource(mainViewModel.hangmanImages[7 - mainViewModel.life])
+                mainViewModel.advanceImage(hangmanDisplay)
             }
             2 -> {
-                mainViewModel.life--
+                mainViewModel.deductLife()
                 showVowels()
-                hangmanDisplay.setImageResource(mainViewModel.hangmanImages[7 - mainViewModel.life])
+                mainViewModel.advanceImage(hangmanDisplay)
             }
         }
 
-        mainViewModel.hintCount++
+        mainViewModel.incHintCount()
     }
 
     private fun disableLetters(tag: String    ) {
@@ -95,7 +121,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 val unusedLetters = enabledLetters.filter { btn ->
-                    !mainViewModel.currentWord.contains(btn.text.toString(), ignoreCase = true)
+                    !mainViewModel.fetchCurrentWord().contains(btn.text.toString(), ignoreCase = true)
                 }
 
                 unusedLetters.shuffled().take(unusedLetters.size / 2).forEach { button ->
@@ -113,16 +139,16 @@ class MainActivity : AppCompatActivity() {
             val letter = button.text.toString()
             if (vowels.contains(letter, true)) {
                 button.isEnabled = false
-                if (mainViewModel.currentWord.contains(letter, true)) {
-                    for (j in mainViewModel.currentWord.indices) {
-                        if (mainViewModel.currentWord[j].equals(letter[0], true)) {
-                            mainViewModel.displayWord = mainViewModel.displayWord.substring(0, j) + letter + mainViewModel.displayWord.substring(j + 1)
+                if (mainViewModel.fetchCurrentWord().contains(letter, true)) {
+                    for (j in mainViewModel.fetchCurrentWord().indices) {
+                        if (mainViewModel.fetchCurrentWord()[j].equals(letter[0], true)) {
+                            mainViewModel.updateDisplayWord(mainViewModel.fetchDisplayWord().substring(0, j) + letter + mainViewModel.fetchDisplayWord().substring(j + 1))
                         }
                     }
                 }
             }
         }
-        wordToGuess.text = mainViewModel.displayWord
+        wordToGuess.text = mainViewModel.fetchDisplayWord()
     }
 
     fun letterClicked(view: View) {
@@ -131,28 +157,28 @@ class MainActivity : AppCompatActivity() {
         button.isEnabled = false
         Log.d("MainActivity", "Button clicked: $letter")
 
-        if (mainViewModel.currentWord.contains(letter, true)) {
-            for (i in mainViewModel.currentWord.indices) {
-                if (mainViewModel.currentWord[i].equals(letter[0], true)) {
-                    mainViewModel.displayWord = mainViewModel.displayWord.substring(0, i) + letter + mainViewModel.displayWord.substring(i + 1)
+        if (mainViewModel.fetchCurrentWord().contains(letter, true)) {
+            for (i in mainViewModel.fetchCurrentWord().indices) {
+                if (mainViewModel.fetchCurrentWord()[i].equals(letter[0], true)) {
+                    mainViewModel.updateDisplayWord(mainViewModel.fetchDisplayWord().substring(0, i) + letter + mainViewModel.fetchDisplayWord().substring(i + 1))
                 }
             }
-            wordToGuess.text = mainViewModel.displayWord
+            wordToGuess.text = mainViewModel.fetchDisplayWord()
 
-            if (!mainViewModel.displayWord.contains("_")) {
+            if (!mainViewModel.fetchDisplayWord().contains("_")) {
                 Toast.makeText(this, "You win!", Toast.LENGTH_SHORT).show()
                 disableLetters("all")
                 newGame()
             }
         } else {
-            mainViewModel.life--
-            if (mainViewModel.life == 0) {
+            mainViewModel.deductLife()
+            if (mainViewModel.fetchLives() == 0) {
                 Toast.makeText(this, "You lose!", Toast.LENGTH_SHORT).show()
-                hangmanDisplay.setImageResource(mainViewModel.hangmanImages[7])
+                mainViewModel.updateImage(hangmanDisplay, 7)
                 disableLetters("all")
                 hintButton?.isEnabled = false
             } else {
-                hangmanDisplay.setImageResource(mainViewModel.hangmanImages[7 - mainViewModel.life])
+                mainViewModel.updateImage(hangmanDisplay,7 - mainViewModel.fetchLives())
             }
         }
     }
