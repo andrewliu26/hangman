@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
     private var currentWord = ""
     private var displayWord = ""
     private var image = 0
-    private var lettersPressed = ArrayList<Int>()
 
     // Connect ViewModel
     private val mainViewModel: MainViewModel by viewModels()
@@ -61,7 +60,6 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.generateWord()
         mainViewModel.initDisplayWord()
         mainViewModel.updateImage(hangmanDisplay, 1)
-        mainViewModel.clearPressed()
 
         hintButton?.isEnabled = true
         wordToGuess.text = mainViewModel.fetchDisplayWord()
@@ -80,11 +78,6 @@ class MainActivity : AppCompatActivity() {
         currentWord = mainViewModel.fetchCurrentWord()
         displayWord = mainViewModel.fetchDisplayWord()
         image = mainViewModel.fetchImage()
-        lettersPressed = mainViewModel.fetchPressed()
-
-        for (i in 0 until lettersPressed.size) {
-            allLetters.getChildAt(lettersPressed[i]).isEnabled = false
-        }
 
         wordToGuess.text = displayWord
         mainViewModel.updateImage(hangmanDisplay, image)
@@ -111,6 +104,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainViewModel.incHintCount()
+    }
+
+    private fun disableClickedButtons() {
+        val clickedButtons = mainViewModel.fetchClickedButtons()
+        for (i in 0 until allLetters.childCount) {
+            val button = allLetters.getChildAt(i) as Button
+            if (clickedButtons.contains(button.text.toString())) {
+                button.isEnabled = false
+            }
+        }
     }
 
     private fun disableLetters(tag: String    ) {
@@ -161,14 +164,13 @@ class MainActivity : AppCompatActivity() {
         wordToGuess.text = mainViewModel.fetchDisplayWord()
     }
 
+
     fun letterClicked(view: View) {
         val button = view as Button
         val letter = button.text.toString()
+        mainViewModel.buttonClicked(letter)
         button.isEnabled = false
-        Log.d(TAG, "Button clicked: $letter")
-
-        val letterIndex = letter[0].lowercaseChar() - 'a'
-        mainViewModel.addToPressed(letterIndex)
+        Log.d("MainActivity", "Button clicked: $letter")
 
         if (mainViewModel.fetchCurrentWord().contains(letter, true)) {
             for (i in mainViewModel.fetchCurrentWord().indices) {
@@ -203,6 +205,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        disableClickedButtons()
         Log.d(TAG, "onResume() called")
     }
 

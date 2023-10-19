@@ -11,7 +11,6 @@ private const val TAG = "MainViewModel"
 const val CONST_CURRENT_WORD = "CONST_CURRENT_WORD"
 const val CONST_DISPLAY_WORD = "CONST_DISPLAY_WORD"
 const val CONST_DRAWABLE = "CONST_DRAWABLE"
-const val CONST_PRESSED = "CONST_PRESSED"
 const val CONST_HINTS = "CONST_HINTS"
 const val CONST_LIFE = "CONST_LIFE"
 
@@ -49,10 +48,6 @@ class MainViewModel (private val savedStateHandle: SavedStateHandle) : ViewModel
     private var hangmanId: Int
         get() = savedStateHandle[CONST_DRAWABLE] ?: 0
         set(value) = savedStateHandle.set(CONST_DRAWABLE, value)
-
-    private var lettersPressed: ArrayList<Int>
-        get() = savedStateHandle[CONST_PRESSED] ?: ArrayList<Int>()
-        set(value) = savedStateHandle.set(CONST_PRESSED, value)
 
     // life functions
     fun updateLife(lives: Int) {
@@ -107,19 +102,22 @@ class MainViewModel (private val savedStateHandle: SavedStateHandle) : ViewModel
     }
 
     // buttons functions
-    fun addToPressed(index: Int) {
-        lettersPressed.add(index)
-        savedStateHandle[CONST_PRESSED] = lettersPressed
-        Log.v(TAG, "Added $index to lettersPressed")
-    }
-    fun fetchPressed(): ArrayList<Int> {
-        Log.v(TAG, "Letters pressed: $lettersPressed")
-        return lettersPressed
-    }
-    fun clearPressed() {
-        lettersPressed.clear()
+    private val clickedButtons: MutableList<String>
+        get() = savedStateHandle.get<MutableList<String>>(CONST_CLICKED_BUTTONS) ?: mutableListOf()
+
+    fun buttonClicked(letter: String) {
+        val updatedList = clickedButtons.apply { add(letter) }
+        savedStateHandle[CONST_CLICKED_BUTTONS] = updatedList
     }
 
+    fun fetchClickedButtons(): List<String> {
+        Log.d("MainActivity", "$clickedButtons")
+        return clickedButtons
+    }
+
+    companion object {
+        const val CONST_CLICKED_BUTTONS = "CONST_CLICKED_BUTTONS"
+    }
 
     // image functions
     fun fetchImage(): Int {
