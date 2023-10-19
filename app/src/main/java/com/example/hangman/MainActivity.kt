@@ -10,16 +10,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModelProvider
-import kotlin.random.Random
+
+private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
+    // views
     private lateinit var wordToGuess: TextView
     private lateinit var hangmanDisplay: ImageView
     private lateinit var allLetters: GridLayout
     private lateinit var newGameButton: Button
     private var hintButton: Button? = null
 
+    // variables
     private var lives = 6
     private var hints = 0
     private var currentWord = ""
@@ -55,16 +57,14 @@ class MainActivity : AppCompatActivity() {
     private fun newGame() {
         mainViewModel.updateLife(6)
         mainViewModel.updateHints(0)
-        hintButton?.isEnabled = true
         mainViewModel.generateWord()
         mainViewModel.initDisplayWord()
-        wordToGuess.text = mainViewModel.fetchDisplayWord()
         mainViewModel.updateImage(hangmanDisplay, 1)
 
-        lives = mainViewModel.fetchLives()
-        hints = mainViewModel.fetchHintCount()
-        currentWord = mainViewModel.fetchCurrentWord()
-        displayWord = mainViewModel.fetchDisplayWord()
+        hintButton?.isEnabled = true
+        wordToGuess.text = mainViewModel.fetchDisplayWord()
+
+        updateState()
 
         for (i in 0 until allLetters.childCount) {
             (allLetters.getChildAt(i)).isEnabled = true
@@ -77,7 +77,11 @@ class MainActivity : AppCompatActivity() {
         hints = mainViewModel.fetchHintCount()
         currentWord = mainViewModel.fetchCurrentWord()
         displayWord = mainViewModel.fetchDisplayWord()
+        image = mainViewModel.fetchImage()
 
+        wordToGuess.text = displayWord
+        mainViewModel.updateImage(hangmanDisplay, image)
+        // allLetters =
     }
 
     private fun showHint() {
@@ -181,5 +185,30 @@ class MainActivity : AppCompatActivity() {
                 mainViewModel.updateImage(hangmanDisplay,7 - mainViewModel.fetchLives())
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart() called")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume() called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause() called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop() called")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy() called")
     }
 }

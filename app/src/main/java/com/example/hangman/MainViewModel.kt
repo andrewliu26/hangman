@@ -1,5 +1,6 @@
 package com.example.hangman
 
+import android.util.Log
 import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.SavedStateHandle
@@ -51,41 +52,52 @@ class MainViewModel (private val savedStateHandle: SavedStateHandle) : ViewModel
     // life functions
     fun updateLife(lives: Int) {
         life = lives
+        Log.v(TAG, "Lives updated")
     }
     fun deductLife() {
-        life -= 1
+        life--
+        Log.v(TAG, "Lives deducted")
     }
     fun fetchLives(): Int {
+        Log.v(TAG, "Lives: $life")
         return life
     }
 
     // hint functions
     fun updateHints(hints: Int) {
         hintCount = hints
+        Log.v(TAG, "Hints updated")
     }
     fun incHintCount() {
         hintCount++
+        Log.v(TAG, "Hints incremented")
     }
     fun fetchHintCount(): Int {
+        Log.v(TAG, "Hints used: $hintCount")
         return hintCount
     }
 
     // current word functions
     fun generateWord() {
         currentWord = wordsList[Random.nextInt(wordsList.size)]
+        Log.v(TAG, "Word generated: $currentWord")
     }
     fun fetchCurrentWord(): String {
+        Log.v(TAG, "Current word: $currentWord")
         return currentWord
     }
 
     // display word functions
     fun initDisplayWord() {
         displayWord = "_".repeat(currentWord.length)
+        Log.v(TAG, "Display word initialized")
     }
     fun updateDisplayWord(word: String) {
         displayWord = word
+        Log.v(TAG, "Display word updated")
     }
     fun fetchDisplayWord(): String {
+        Log.v(TAG, "Display word: $displayWord")
         return displayWord
     }
 
@@ -94,13 +106,16 @@ class MainViewModel (private val savedStateHandle: SavedStateHandle) : ViewModel
 
     // image functions
     fun fetchImage(): Int {
+        Log.v(TAG, "Image: $hangmanDisplay")
         return hangmanDisplay
     }
     fun updateImage(view: ImageView, index: Int) {
         view.setImageResource(hangmanImages[index])
         hangmanDisplay = index
+        Log.v(TAG, "Image updated")
     }
     fun advanceImage(view: ImageView) {
         updateImage(view, hangmanImages[7 - life])
+        Log.v(TAG, "Image advanced")
     }
 }
