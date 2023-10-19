@@ -11,6 +11,7 @@ private const val TAG = "MainViewModel"
 const val CONST_CURRENT_WORD = "CONST_CURRENT_WORD"
 const val CONST_DISPLAY_WORD = "CONST_DISPLAY_WORD"
 const val CONST_DRAWABLE = "CONST_DRAWABLE"
+const val CONST_PRESSED = "CONST_PRESSED"
 const val CONST_HINTS = "CONST_HINTS"
 const val CONST_LIFE = "CONST_LIFE"
 
@@ -45,9 +46,13 @@ class MainViewModel (private val savedStateHandle: SavedStateHandle) : ViewModel
         get() = savedStateHandle[CONST_HINTS] ?: 0
         set(value) = savedStateHandle.set(CONST_HINTS, value)
 
-    private var hangmanDisplay: Int
+    private var hangmanId: Int
         get() = savedStateHandle[CONST_DRAWABLE] ?: 0
         set(value) = savedStateHandle.set(CONST_DRAWABLE, value)
+
+    private var lettersPressed: ArrayList<Int>
+        get() = savedStateHandle[CONST_PRESSED] ?: ArrayList<Int>()
+        set(value) = savedStateHandle.set(CONST_PRESSED, value)
 
     // life functions
     fun updateLife(lives: Int) {
@@ -102,16 +107,28 @@ class MainViewModel (private val savedStateHandle: SavedStateHandle) : ViewModel
     }
 
     // buttons functions
+    fun addToPressed(index: Int) {
+        lettersPressed.add(index)
+        savedStateHandle[CONST_PRESSED] = lettersPressed
+        Log.v(TAG, "Added $index to lettersPressed")
+    }
+    fun fetchPressed(): ArrayList<Int> {
+        Log.v(TAG, "Letters pressed: $lettersPressed")
+        return lettersPressed
+    }
+    fun clearPressed() {
+        lettersPressed.clear()
+    }
 
 
     // image functions
     fun fetchImage(): Int {
-        Log.v(TAG, "Image: $hangmanDisplay")
-        return hangmanDisplay
+        Log.v(TAG, "Image index: $hangmanId")
+        return hangmanId
     }
     fun updateImage(view: ImageView, index: Int) {
         view.setImageResource(hangmanImages[index])
-        hangmanDisplay = index
+        hangmanId = index
         Log.v(TAG, "Image updated")
     }
     fun advanceImage(view: ImageView) {
