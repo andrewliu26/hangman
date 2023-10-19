@@ -66,14 +66,14 @@ class MainViewModel (private val savedStateHandle: SavedStateHandle) : ViewModel
     // hint functions
     fun updateHints(hints: Int) {
         hintCount = hints
-        Log.v(TAG, "Hints updated")
+        Log.v("MainViewModel", "Hints updated")
     }
     fun incHintCount() {
         hintCount++
-        Log.v(TAG, "Hints incremented")
+        Log.v("MainViewModel", "Hints incremented")
     }
     fun fetchHintCount(): Int {
-        Log.v(TAG, "Hints used: $hintCount")
+        Log.v("MainViewModel", "Hints used: $hintCount")
         return hintCount
     }
 
@@ -115,22 +115,35 @@ class MainViewModel (private val savedStateHandle: SavedStateHandle) : ViewModel
         return clickedButtons
     }
 
+    fun clearClickedButtons() {
+        clickedButtons.clear()
+        savedStateHandle[CONST_CLICKED_BUTTONS] = clickedButtons
+        Log.v(TAG, "Clicked buttons cleared")
+    }
+
     companion object {
         const val CONST_CLICKED_BUTTONS = "CONST_CLICKED_BUTTONS"
     }
 
     // image functions
     fun fetchImage(): Int {
-        Log.v(TAG, "Image index: $hangmanId")
+        Log.v("MainViewModel", "Image index: $hangmanId")
         return hangmanId
     }
     fun updateImage(view: ImageView, index: Int) {
-        view.setImageResource(hangmanImages[index])
-        hangmanId = index
-        Log.v(TAG, "Image updated")
+        if (index in hangmanImages.indices) {
+            view.setImageResource(hangmanImages[index])
+            hangmanId = index
+            Log.v("MainViewModel", "Image updated")
+        } else {
+            Log.e("MainViewModel", "Invalid index: $index")
+        }
     }
     fun advanceImage(view: ImageView) {
-        updateImage(view, hangmanImages[7 - life])
-        Log.v(TAG, "Image advanced")
+        Log.v(TAG, "lives: $life")
+        val newIndex = 7 - life
+        Log.v("MainViewModel", "New index calculated: $newIndex")
+        updateImage(view, newIndex)
+        Log.v("MainViewModel", "Image advanced")
     }
 }

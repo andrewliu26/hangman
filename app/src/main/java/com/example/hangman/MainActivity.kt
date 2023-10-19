@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.generateWord()
         mainViewModel.initDisplayWord()
         mainViewModel.updateImage(hangmanDisplay, 1)
+        mainViewModel.clearClickedButtons()
 
         hintButton?.isEnabled = true
         wordToGuess.text = mainViewModel.fetchDisplayWord()
@@ -84,25 +85,32 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showHint() {
+        val currentHintCount = mainViewModel.fetchHintCount()
         if (mainViewModel.fetchLives() <= 1) {
             Toast.makeText(this, "Hint not available", Toast.LENGTH_SHORT).show()
             return
         }
 
-        when (mainViewModel.fetchHintCount()) {
+        when (currentHintCount) {
             0 -> Toast.makeText(this, "Your first hint: Fruit!", Toast.LENGTH_SHORT).show()
             1 -> {
-                mainViewModel.deductLife()
-                disableLetters("half")
-                mainViewModel.advanceImage(hangmanDisplay)
+                if(mainViewModel.fetchLives() > 1) {
+                    mainViewModel.deductLife()
+                    disableLetters("half")
+                    mainViewModel.advanceImage(hangmanDisplay)
+                }
             }
             2 -> {
-                mainViewModel.deductLife()
-                showVowels()
-                mainViewModel.advanceImage(hangmanDisplay)
+                if(mainViewModel.fetchLives() > 1) {
+                    mainViewModel.deductLife()
+                    showVowels()
+                    mainViewModel.advanceImage(hangmanDisplay)
+                }
+            }
+            else -> {
+
             }
         }
-
         mainViewModel.incHintCount()
     }
 
@@ -139,6 +147,7 @@ class MainActivity : AppCompatActivity() {
 
                 unusedLetters.shuffled().take(unusedLetters.size / 2).forEach { button ->
                     button.isEnabled = false
+                    mainViewModel.buttonClicked(button.text.toString())
                 }
             }
         }
@@ -152,6 +161,7 @@ class MainActivity : AppCompatActivity() {
             val letter = button.text.toString()
             if (vowels.contains(letter, true)) {
                 button.isEnabled = false
+                mainViewModel.buttonClicked(letter)
                 if (mainViewModel.fetchCurrentWord().contains(letter, true)) {
                     for (j in mainViewModel.fetchCurrentWord().indices) {
                         if (mainViewModel.fetchCurrentWord()[j].equals(letter[0], true)) {
@@ -166,6 +176,11 @@ class MainActivity : AppCompatActivity() {
 
 
     fun letterClicked(view: View) {
+        if (currentWord.isEmpty()) {
+            Toast.makeText(this, "Start a new game", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val button = view as Button
         val letter = button.text.toString()
         mainViewModel.buttonClicked(letter)
