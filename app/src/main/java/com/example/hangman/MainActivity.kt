@@ -71,6 +71,8 @@ class MainActivity : AppCompatActivity() {
             (allLetters.getChildAt(i)).isEnabled = true
         }
 
+        Toast.makeText(this, "New Game Started", Toast.LENGTH_SHORT).show()
+
     }
 
     private fun updateState() {
@@ -96,6 +98,7 @@ class MainActivity : AppCompatActivity() {
             1 -> {
                 if(mainViewModel.fetchLives() > 1) {
                     mainViewModel.deductLife()
+                    Toast.makeText(this, "Disabled half of letters", Toast.LENGTH_SHORT).show()
                     disableLetters("half")
                     mainViewModel.advanceImage(hangmanDisplay)
                 }
@@ -103,12 +106,13 @@ class MainActivity : AppCompatActivity() {
             2 -> {
                 if(mainViewModel.fetchLives() > 1) {
                     mainViewModel.deductLife()
+                    Toast.makeText(this, "Displayed vowels", Toast.LENGTH_SHORT).show()
                     showVowels()
                     mainViewModel.advanceImage(hangmanDisplay)
                 }
             }
             else -> {
-
+                Toast.makeText(this, "No more hints", Toast.LENGTH_SHORT).show()
             }
         }
         mainViewModel.incHintCount()
@@ -128,7 +132,9 @@ class MainActivity : AppCompatActivity() {
         when (tag) {
             "all" -> {
                 for (i in 0 until allLetters.childCount) {
-                    (allLetters.getChildAt(i) as Button).isEnabled = false
+                    val button = allLetters.getChildAt(i) as Button
+                    button.isEnabled = false
+                    mainViewModel.buttonClicked(button.text.toString())
                 }
             }
             "half" -> {
@@ -198,7 +204,6 @@ class MainActivity : AppCompatActivity() {
             if (!mainViewModel.fetchDisplayWord().contains("_")) {
                 Toast.makeText(this, "You win!", Toast.LENGTH_SHORT).show()
                 disableLetters("all")
-                newGame()
             }
         } else {
             mainViewModel.deductLife()
