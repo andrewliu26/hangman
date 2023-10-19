@@ -59,7 +59,7 @@ class MainViewModel (private val savedStateHandle: SavedStateHandle) : ViewModel
         Log.v(TAG, "Lives deducted")
     }
     fun fetchLives(): Int {
-        Log.v(TAG, "Lives: $life")
+//        Log.v(TAG, "Lives: $life")
         return life
     }
 
@@ -73,7 +73,7 @@ class MainViewModel (private val savedStateHandle: SavedStateHandle) : ViewModel
         Log.v("MainViewModel", "Hints incremented")
     }
     fun fetchHintCount(): Int {
-        Log.v("MainViewModel", "Hints used: $hintCount")
+//        Log.v("MainViewModel", "Hints used: $hintCount")
         return hintCount
     }
 
